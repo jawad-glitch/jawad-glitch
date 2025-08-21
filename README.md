@@ -2,6 +2,7 @@
 
 # Hey there, I'm Jawad 👋
                                                     
+![banner](https://github.com/jawad-glitch/jawad-glitch/raw/main/banner.png)
 
 ---
 
