@@ -6,7 +6,7 @@ Tech enthusiast exploring AI 🤖, cybersecurity 🔐, cloud ☁️, and Linux �
 
 I love building projects that solve real problems and learning new stuff every day.
 
-![Coding GIF](https://media.giphy.com/media/3o7aD4o3Q3I7oH7H6Y/giphy.gif)
+![Coding GIF](https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif)
 
 ---
 
