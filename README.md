@@ -1,9 +1,6 @@
 ## Hi there 👋
 
 # Hey there, I'm Jawad 👋
-
-  
-         <img width="627" height="192" alt="ascii-art-text" src="https://github.com/user-attachments/assets/b31acf70-0168-4572-ad51-07402c1fa29d?raw=true" />
                                                     
 
 ---
