@@ -2,11 +2,14 @@
 
 # Hey there, I'm Jawad 👋
 
-Tech enthusiast exploring AI 🤖, cybersecurity 🔐, cloud ☁️, and Linux 🐧.
-
-I love building projects that solve real problems and learning new stuff every day.
-
-![Coding GIF](https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif)
+  _______   ___        __  ___________  ______    __    __   
+ /" _   "| |"  |      |" \("     _   ")/" _  "\  /" |  | "\  
+(: ( \___) ||  |      ||  |)__/  \\__/(: ( \___)(:  (__)  :) 
+ \/ \      |:  |      |:  |   \\_ /    \/ \      \/      \/  
+ //  \ ___  \  |___   |.  |   |.  |    //  \ _   //  __  \\  
+(:   _(  _|( \_|:  \  /\  |\  \:  |   (:   _) \ (:  (  )  :) 
+ \_______)  \_______)(__\_|_)  \__|    \_______) \__|  |__/  
+                                                             
 
 ---
 
@@ -17,10 +20,6 @@ I love building projects that solve real problems and learning new stuff every d
 - Managing cloud infrastructure and Linux servers
 
 ---
-
-Feel free to check out my repos and say hi! 👇
-
-[![GitHub stats](https://github-readme-stats.vercel.app/api?username=jawad-glitch&show_icons=true&theme=radical)](https://github.com/jawad-glitch)
 
 
 <!--
