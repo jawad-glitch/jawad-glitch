@@ -1,0 +1,612 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "T4",
+      "authorship_tag": "ABX9TyMvW+CCDx07LYIwRz1tU3vL",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/jawad-glitch/jawad-glitch/blob/main/Building_LinearRegression_model\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Building logistic regression model"
+      ],
+      "metadata": {
+        "id": "s69Z1DizlaV9"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#pytorch is like advanced version of np arrays (bcs its used for computation) and is mainly used for deep learning"
+      ],
+      "metadata": {
+        "id": "6CwaMhqiYMEz"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "id": "xtumFJcZSCsF"
+      },
+      "outputs": [],
+      "source": [
+        "import torch\n",
+        "import torchvision\n",
+        "from torchvision.datasets import MNIST\n",
+        "import matplotlib.pyplot as plt"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#downloading MNIST(numbers list) data:\n",
+        "dataset = MNIST(root = 'data', download=True)"
+      ],
+      "metadata": {
+        "id": "AXawQEUNmX0y"
+      },
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "len(dataset)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SR7NCBTuoNCu",
+        "outputId": "54bec70b-5721-4ba4-b4f7-e0d927558846"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "60000"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Now we will download the test part of this MNIST folder:\n",
+        "test_dataset = MNIST(root='data', train=False)"
+      ],
+      "metadata": {
+        "id": "WEcUeogRmxN_"
+      },
+      "execution_count": 8,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "len(test_dataset)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HCUt9a4IoZ_d",
+        "outputId": "f41b2ae6-5ecd-4e72-81d8-0677225ff599"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "10000"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%matplotlib inline"
+      ],
+      "metadata": {
+        "id": "NKOYQbkboc5D"
+      },
+      "execution_count": 10,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "image, label = dataset[59999]\n",
+        "plt.imshow(image, cmap = 'gray')\n",
+        "print('label:' , label)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 447
+        },
+        "id": "4oPJb3x-pq92",
+        "outputId": "8dc3772b-b7e6-482f-92c1-270561be1feb"
+      },
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "label: 8\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 640x480 with 1 Axes>"
+            ],
+            "image/png": "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00/HVPfYY495rvntb3/ruWbNmjWea15//XXPNZLU3NwcUx0A7zgDAgCYIIAAACYIIACACQIIAGCCAAIAmCCAAAAmCCAAgAkCCABgggACAJgggAAAJgggAIAJAggAYIKbkaaYW265xXPNt771rZj29Zvf/MZzzaOPPhrTvrzKycmJqa61tTXOnQA4F86AAAAmCCAAgAlPAVRRUaEpU6YoMzNTubm5mjNnjurr66O2OXHihMrLy3XVVVfpyiuv1Pz589XR0RHXpgEAfZ+nAKqpqVF5ebn27NmjN954Q6dOndKMGTPU1dUV2Wb58uXasWOHXnvtNdXU1Ki1tVXz5s2Le+MAgL7N00UIu3btinq8YcMG5ebmav/+/SouLlYoFNJLL72kzZs369Zbb5UkrV+/Xl/96le1Z88efeMb34hf5wCAPu2iPgMKhUKSpOzsbEnS/v37derUKZWUlES2GTdunEaMGKHa2tpen6O7u1vhcDhqAABSX8wB1NPTo4ceekg33nijxo8fL0lqb29XRkaGhgwZErVtXl6e2tvbe32eiooK+f3+yBg+fHisLQEA+pCYA6i8vFwHDx7UK6+8clENrFq1SqFQKDJaWlou6vkAAH1DTH+IumzZMu3cuVO7d+/WsGHDIssDgYBOnjypo0ePRp0FdXR0KBAI9PpcPp9PPp8vljYAAH2YpzMg55yWLVumrVu36q233lJBQUHU+smTJ2vAgAGqqqqKLKuvr1dzc7OKiori0zEAICV4OgMqLy/X5s2btX37dmVmZkY+1/H7/Ro0aJD8fr8WLVqkFStWKDs7W1lZWXrggQdUVFTEFXAAgCieAuiFF16QJE2bNi1q+fr163XvvfdKkp577jmlp6dr/vz56u7u1syZM/XLX/4yLs0CAFKHpwByzl1wm4EDB6qyslKVlZUxN4XYzZ4923PNhAkTYtrXwYMHPdccOXLEc01WVpbnmv/+97+ea6QzZ/levfPOOzHtC7jccS84AIAJAggAYIIAAgCYIIAAACYIIACACQIIAGCCAAIAmCCAAAAmCCAAgAkCCABgggACAJgggAAAJgggAICJmL4RFcnrvffeu2T7Gjx48CXZT//+3g/TzMzMmPb15z//OaY6AN5xBgQAMEEAAQBMEEAAABMEEADABAEEADBBAAEATBBAAAATBBAAwAQBBAAwQQABAEwQQAAA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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torchvision.transforms as transforms"
+      ],
+      "metadata": {
+        "id": "1MLlgBy_osMm"
+      },
+      "execution_count": 12,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dataset = MNIST(root='data', train=True, transform=transforms.ToTensor())"
+      ],
+      "metadata": {
+        "id": "HNC5wuBEsANG"
+      },
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "len(dataset)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "iHP4-fI6sdhO",
+        "outputId": "7f19d7b8-4112-4563-c55f-3be3ce01aafe"
+      },
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "60000"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 14
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "img, label = dataset[0]\n",
+        "print(img.shape)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HknHKbHasnWJ",
+        "outputId": "8eef1d54-ee77-45fa-d3a8-2b85c6263410"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "torch.Size([1, 28, 28])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#splitting training and validation data in 50k:10k ratio\n",
+        "from torch.utils.data import random_split\n",
+        "train_dataset, validation_dataset = random_split(dataset, [50000,10000])"
+      ],
+      "metadata": {
+        "id": "BJG3weD9sq13"
+      },
+      "execution_count": 16,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Create data loaders\n",
+        "from torch.utils.data import DataLoader\n",
+        "train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)\n",
+        "validation_loader = DataLoader(validation_dataset, batch_size=64)"
+      ],
+      "metadata": {
+        "id": "wrBE725MwPOh"
+      },
+      "execution_count": 17,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torch.nn as nn\n",
+        "input_size = 28*28 #we are making this 2d array into a 1d bcs it wont process as 28x28 array\n",
+        "num_class = 10 #10 possible outputs\n",
+        "import torch.nn as nn\n",
+        "\n",
+        "model = nn.Sequential(\n",
+        "    nn.Flatten(),\n",
+        "    nn.Linear(784, 128),\n",
+        "    nn.ReLU(),\n",
+        "    nn.Linear(128, 10)\n",
+        ")\n",
+        "\n",
+        "  #creating the model"
+      ],
+      "metadata": {
+        "id": "PBRl5P_0xzWm"
+      },
+      "execution_count": 33,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "model.weight #are both randomly assigned for now"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 263
+        },
+        "collapsed": true,
+        "id": "jj23hp8By77R",
+        "outputId": "b2bbab6e-7e9f-4a11-d43e-f27f971ebb18"
+      },
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "AttributeError",
+          "evalue": "'Sequential' object has no attribute 'weight'",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mAttributeError\u001b[0m                            Traceback (most recent call last)",
+            "\u001b[0;32m/tmp/ipython-input-3087293361.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mmodel\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mweight\u001b[0m \u001b[0;31m#are both randomly assigned for now\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py\u001b[0m in \u001b[0;36m__getattr__\u001b[0;34m(self, name)\u001b[0m\n\u001b[1;32m   1960\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mname\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mmodules\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1961\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0mmodules\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1962\u001b[0;31m         raise AttributeError(\n\u001b[0m\u001b[1;32m   1963\u001b[0m             \u001b[0;34mf\"'{type(self).__name__}' object has no attribute '{name}'\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1964\u001b[0m         )\n",
+            "\u001b[0;31mAttributeError\u001b[0m: 'Sequential' object has no attribute 'weight'"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "img.shape"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "uXMR5bPozV1V",
+        "outputId": "0673274c-faf0-400c-e2fe-cb7440882392"
+      },
+      "execution_count": 34,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "torch.Size([1, 28, 28])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 34
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#but we gotta reshape it:\n",
+        "img.reshape(784).shape"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SYin2Dfs0GNh",
+        "outputId": "4e523c0d-2b3b-4790-89cb-a6fc3d8320fb"
+      },
+      "execution_count": 35,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "torch.Size([784])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 35
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torch.optim as optim\n",
+        "#creating a loss fuunction used for classification:\n",
+        "loss_func = nn.CrossEntropyLoss()\n",
+        "#creating an optimizer that will change parameters for better performance\n",
+        "optimizer = optim.SGD(model.parameters(), lr=0.01)   #lr=learning rate"
+      ],
+      "metadata": {
+        "id": "6eUENqFw0ZhH"
+      },
+      "execution_count": 36,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class Trainer:\n",
+        "    def __init__(self, model, loss_fn, optimizer, train_loader, val_loader):\n",
+        "        self.model = model\n",
+        "        self.loss_fn = loss_fn\n",
+        "        self.optimizer = optimizer\n",
+        "        self.train_loader = train_loader\n",
+        "        self.val_loader = val_loader\n",
+        "\n",
+        "    def train(self, epochs):\n",
+        "        for epoch in range(epochs):\n",
+        "            self.model.train()\n",
+        "            total_train_loss = 0\n",
+        "\n",
+        "            for images, labels in self.train_loader:\n",
+        "                self.optimizer.zero_grad()\n",
+        "                outputs = self.model(images)\n",
+        "                loss = self.loss_fn(outputs, labels) #compares outputs with actual labels\n",
+        "                loss.backward()\n",
+        "                self.optimizer.step()  #will actually tune parameters\n",
+        "                total_train_loss += loss.item()  #to see how much model is improving\n",
+        "\n",
+        "            val_loss, val_accuracy = self.validate()\n",
+        "            print(f\"Epoch {epoch+1}: Train Loss = {total_train_loss:.4f} | Val Loss = {val_loss:.4f} | Val Accuracy = {val_accuracy:.2f}%\")\n",
+        "\n",
+        "    def validate(self):\n",
+        "        self.model.eval()\n",
+        "        total_val_loss = 0\n",
+        "        correct = 0\n",
+        "        total = 0\n",
+        "\n",
+        "        with torch.no_grad():\n",
+        "            for images, labels in self.val_loader:\n",
+        "                outputs = self.model(images)\n",
+        "                loss = self.loss_fn(outputs, labels)\n",
+        "                total_val_loss += loss.item()\n",
+        "                _, predicted = torch.max(outputs, 1)\n",
+        "                correct += (predicted == labels).sum().item()\n",
+        "                total += labels.size(0)\n",
+        "\n",
+        "        accuracy = 100 * correct / total\n",
+        "        return total_val_loss, accuracy\n"
+      ],
+      "metadata": {
+        "id": "XYoXX7pa57oK"
+      },
+      "execution_count": 37,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "Trainer( model, loss_func, optimizer, train_loader, validation_loader)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "x7VJSqP_Hjuo",
+        "outputId": "8c9ba618-c3ae-4d0a-dfa7-b4aed685e105"
+      },
+      "execution_count": 38,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<__main__.Trainer at 0x7c1b886b0bf0>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 38
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "trainer = Trainer( model, loss_func, optimizer, train_loader, validation_loader)"
+      ],
+      "metadata": {
+        "id": "EYwVCpd2IilC"
+      },
+      "execution_count": 39,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "trainer.train(epochs=5)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yX0cU_OQJX-V",
+        "outputId": "39e5f911-be40-443e-d1f0-8bc15645ca55"
+      },
+      "execution_count": 40,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch 1: Train Loss = 1065.4067 | Val Loss = 107.5755 | Val Accuracy = 84.73%\n",
+            "Epoch 2: Train Loss = 422.8288 | Val Loss = 71.7065 | Val Accuracy = 88.12%\n",
+            "Epoch 3: Train Loss = 326.5883 | Val Loss = 61.2330 | Val Accuracy = 89.12%\n",
+            "Epoch 4: Train Loss = 289.8394 | Val Loss = 55.8777 | Val Accuracy = 90.02%\n",
+            "Epoch 5: Train Loss = 268.3568 | Val Loss = 52.5416 | Val Accuracy = 90.57%\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#NEW\n",
+        "dataset1 = MNIST(root='data', train=False, transform=transforms.ToTensor())"
+      ],
+      "metadata": {
+        "id": "Qi_oHcZXJbCP"
+      },
+      "execution_count": 42,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#dataloader for the test set:\n",
+        "test_loader = DataLoader(dataset1, batch_size=64)"
+      ],
+      "metadata": {
+        "id": "vG7HozDxLNhW"
+      },
+      "execution_count": 43,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def test_model(model, test_loader, loss_func):\n",
+        "    model.eval()  # set model to evaluation mode\n",
+        "    total_loss = 0\n",
+        "    correct = 0\n",
+        "    total = 0\n",
+        "\n",
+        "    with torch.no_grad():  # disable gradient tracking for testing\n",
+        "        for images, labels in test_loader:\n",
+        "            outputs = model(images)\n",
+        "            loss = loss_func(outputs, labels)\n",
+        "            total_loss += loss.item()\n",
+        "\n",
+        "            # Get predicted class by finding max logit\n",
+        "            _, predicted = torch.max(outputs, dim=1)\n",
+        "            correct += (predicted == labels).sum().item()\n",
+        "            total += labels.size(0)\n",
+        "\n",
+        "    accuracy = 100 * correct / total\n",
+        "    print(f\"Test Loss: {total_loss:.4f} | Test Accuracy: {accuracy:.2f}%\")\n"
+      ],
+      "metadata": {
+        "id": "r6UDsCwhPCNq"
+      },
+      "execution_count": 48,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Assuming model is trained and loss_fn is defined\n",
+        "test_model(model, test_loader, loss_func)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "7x6HHdnNPj7q",
+        "outputId": "b1aa79d5-8ce4-47b0-9cbb-a9b47ed4bd13"
+      },
+      "execution_count": 50,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Test Loss: 50.0247 | Test Accuracy: 91.14%\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "e_zpsc7sPzIm"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
