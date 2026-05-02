@@ -23,4 +23,4 @@ Based in Dubai 🇦🇪 | Open to Junior DevOps & Cloud roles
 
 ## Connect
 - 🔗 [LinkedIn](https://www.linkedin.com/in/muhammad-jawad-a48b1031b)
-- 📧 your@email.com
+- 📧 muhammadjawadok@email.com
