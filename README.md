@@ -1,29 +1,26 @@
-# Hey there, I'm Jawad 👋
-                                                    
-![banner](https://github.com/jawad-glitch/jawad-glitch/blob/main/ascii-art-text.png)
+# Hi, I'm Jawad 👋 — Junior DevOps & AIops Engineer
+Based in Dubai 🇦🇪 | Open to Junior DevOps & Cloud roles
 
----
+## What I do
+- 🛠️ Build and automate cloud infrastructure on AWS
+- 🤖 Apply AI/ML operations principles to real systems
+- 🐧 Work daily in Linux environments
+- 🔒 Explore DevSecOps and system hardening
+- 🦾 Currently building a robotics project with Arduino
 
-### What I'm up to:
+## Tech Stack
+**Cloud:** AWS (EC2, S3, IAM, Lambda)  
+**IaC & Automation:** Terraform, Bash, Python  
+**Containers:** Docker  
+**CI/CD:** GitHub Actions  
+**OS:** Linux (Ubuntu, CentOS)  
+**ML/AI:** Python, scikit-learn, basic model deployment  
 
-- Diving deep into machine learning and AI models
-- Securing systems and exploring cybersecurity tools
-- Managing cloud infrastructure and Linux servers
+## Currently
+- 📚 Completing EduQual Level 6 Diploma in AIops
+- 🎯 Preparing for AWS Cloud Practitioner cert
+- 💼 Actively looking for Junior DevOps / Cloud roles in UAE
 
----
-
-
-<!--
-**jawad-glitch/jawad-glitch** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Connect
+- 🔗 [LinkedIn](https://www.linkedin.com/in/muhammad-jawad-a48b1031b)
+- 📧 your@email.com
